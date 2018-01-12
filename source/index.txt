@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to test's documentation!
+Welcome to Victortest's documentation!
 ================================
 
 .. toctree::
@@ -12,9 +12,7 @@ Welcome to test's documentation!
 
 
 
-Indices and tables
+目录
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+:ref:`第五章 各硬件产品开发指南 <第五章 各硬件产品开发指南>`
