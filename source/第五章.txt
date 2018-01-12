@@ -1,0 +1,211 @@
+.. _第五章 各硬件产品开发指南:
+
+第五章	各硬件产品开发指南
+====================================
+
+本章将介绍SDK在Pico各硬件产品上的使用方法，开发者根据需要选择看相应的内容即可。
+
+5.1	Pico Goblin & Pico U
+------------------------------------
+
+5.1.1	实现头部跟踪与立体渲染
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+实现头部跟踪与前文SDK快速入门一致，只需要将Pvr_UnitySDK预制体放入场景即可。但是有一点需要注意，放入场景后，展开场景中的Pvr_UnitySDK物体，切换到其细节面板：
+
+.. image:: _static/5.1.PNG
+图5.1 为Pico Goblin切换跟踪选项
+
+需要确保Pvr_Unity SDK Manager组件的如下属性：Head Pose：Three Dof；Hand Pose：Three Dof；Controller Num：One。
+
+
+5.1.2	使用3dof手柄预制体
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pico 3dof Controller目前支持Pico Goblin、Pico U两种设备，使用Pico 3dof Controller请遵循以下步骤：
+
+1、展开Assets> Pvr_Controller> Prefabs，将Goblin_Controller预制体放到场景中，作为Pvr_UnitySDK子GameObject与Head同级：
+
+.. image:: _static/5.2.PNG
+图5.2 Goblin_Controller预制体拖放位置
+
+2、展开Assets> Pvr_Controller> Prefabs，将ControllerManager预制体放到场景里，然后将Goblin_Controller挂在ControllerManager上的Pvr_Controller脚本中，将Goblin_Controller下的toast挂在Pvr_ControllerManager脚本中：
+
+.. image:: _static/5.3.PNG
+图5.3 设置ControllerManager
+
+5.1.3	使用3dof手柄的按键、触摸板
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+使用3dof手柄的按键与触摸板，需要调用手柄相关的接口，具体接口请参照第六章API接口函数一览中的6.3小节。这里介绍以下接口的参数与物理手柄按键的对应关系。
+
+首先是按键，按键与API中接口函数的对应关系如下：
+
+手柄物理按键与API接口函数中参数的对应关系
+
++----------------------------------------------------+-----------------------+
+|     按键                                           |      键值             |
++====================================================+=======================+
+| |图片1|                                            |Pvr_KeyCode.APP        |
++----------------------------------------------------+-----------------------+
+| |图片2|                                            |Pvr_KeyCode.TOUCHPAD   | 
++----------------------------------------------------+-----------------------+
+| |图片3|                                            |Pvr_KeyCode.HOME       |
++----------------------------------------------------+-----------------------+
+| |图片4|                                            |Pvr_KeyCode.VOLUMEUP   | 
++----------------------------------------------------+-----------------------+
+| |图片5|                                            |Pvr_KeyCode.VOLUMEDOWN |
++----------------------------------------------------+-----------------------+
+
+.. |图片1| image:: _static/5.3.1.PNG
+.. |图片2| image:: _static/5.3.2.PNG
+.. |图片3| image:: _static/5.3.3.PNG
+.. |图片4| image:: _static/5.3.4.PNG
+.. |图片5| image:: _static/5.3.5.PNG
+
+然后是触摸板，触摸板的示意图如下：
+
+.. _触摸板的示意图
+
+.. image:: _static/5.4.PNG
+图5.4 触摸板示意图
+
+**注意**：手柄的滑动功能是手指抬起后才判定滑动结束。
+
+5.1.4	使用Goblin HMD按键
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Goblin HMD按键如下图所示：
+
+.. image:: _static/5.5.PNG
+图5.5 Goblin HMD按键
+
+表5.2 Goblin HMD按键与Unity输入的对应关系
+
+==============================================    ==============================================
+Goblin HMD按键                                    Unity输入键
+按键1                                             Power键---系统占用
+按键2                                             Home键---系统占用
+按键3                                             JoystickButton0
+按键4                                             音量+
+按键5                                             音量-
+==============================================    ==============================================
+
+5.2	Pico Neo DK/ DKS
+------------------------
+
+5.2.1	实现头部跟踪与立体渲染
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pico Neo DK/ DKS实现头部跟踪与立体渲染的方法和Pico Gobliin一致，这里不再赘述。
+
+5.2.2	启用分体控制器的姿态跟踪
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pico Neo DK/DKS分体控制器如下所示：
+
+.. image:: _static/5.6.PNG
+图5.6 Pico Neo DK/DKS分体控制器
+
+如想启用分体控制器的姿态跟踪，请展开Assets> Pvr_ExtraSensor> Scripts，将Pvr_ExtraSensor脚本附加到您想跟随分体控制器姿态的GameObject上：
+
+.. image:: _static/5.7.PNG
+图5.7 启用分体控制器姿态跟踪
+
+启用Neo Controller姿态追踪后，PicoVRManager.SDK.boxQuaternion变量（四元数）会实时更新，可以直接读取boxQuaternion变量，也可以通过接口public Quaternion getBoxQuaternion()来获得Controller的姿态数据。
+
+5.2.3	使用分体控制器的按键
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pico Neo DK/DKS分体控制器采用游戏控制器标准按键，按键分布如下：
+
+.. image:: _static/5.8.PNG
+图5.8 Pico Neo DK/DKS分体控制器按键分布
+
+可按下表使用分体控制器的按键输入：
+
+表5.3 分体控制器与Unity中的键值对应关系
+
+========== =============== =========================== ==============================
+编号       键符            Unity对应按键值1            Unity对应按键值2
+1          A               JoystickButton0             JoystickButton0
+2          B               JoystickButton1             JoystickButton1
+3          X               JoystickButton2             JoystickButton2
+4          Y               JoystickButton3             JoystickButton3
+5          Menu            Menu                        无
+6          Return          Escape                      无
+7          Left Trigger    JoystickButton4             JoystickButton4
+8          Right Trigger   JoystickButton5             JoystickButton5
+9          电源            无                          无
+10         横轴            Input.GetAxis("Mouse X")    Input.GetAxis("Horizontal")
+11         竖轴            Input.GetAxis("Mouse Y")    Input.GetAxis("Vertical")
+12         Pico            无                          无
+========== =============== =========================== ==============================
+
+使用前，请参照下图设置Unity的input：
+
+.. image:: _static/5.9.PNG
+图5.9 Unity input设置
+
+5.3	Pico Neo
+--------------------
+
+5.3.1	实现头部跟踪与立体渲染
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+实现头部跟踪与前文SDK快速入门一致，只需要将Pvr_UnitySDK预制体放入场景即可。需要注意的是，Pico Neo支持多种跟踪方式。展开场景中的Pvr_UnitySDK物体，切换到其细节面板：
+
+.. image:: _static/5.10.PNG
+图5.10 为Pico Goblin切换跟踪选项
+
+Head Recenter：当Head Pose为Six Dof时，只有勾选“Six Dof Head Recenter”才可以重置位置，否则长按Home键将只重置手柄姿态。
+
+- Show SafePanel：当勾选Show SafePanel时，启动游戏会有安全提示面板。
+
+- Head Pose：
+
+1、Three Dof，表示头部跟踪为3自由度跟踪，只有姿态，没有位置；
+
+2、Six Dof，表示头部的跟踪为6自由度，有姿态，也有位置。
+
+- Hand Pose：
+
+1、ThreeDof，表示手部跟踪为3自由度，有姿态，而位置是根据头部姿态及手柄的传感器数据计算而来，跟踪范围有限。
+
+2、Six Dof，手部的跟踪为6自由度，姿态和位置都会跟踪。
+			   
+- SafeRange：即安全区域，分Min（半径为0.5m），Med（半径为1m），Max（半径为∞）。超出安全范围后会有区域提示和视野变黑效果。
+
+5.3.2	使用6dof手柄预制体
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+使用6dof手柄，需要遵循如下步骤：
+
+1、将CV_Controller0和CV_Controller1预制体放到Pvr_UnitySDK下，与Head同级。如下图所示：
+
+.. image:: _static/5.11.PNG
+图5.11 6dof手柄预制体层级关系
+
+2、将ControllerManager预制体放到场景里，然后将CV_Controller0,CV_Controller1挂在ControllerManager上的Pvr_Controller中，如下图所示：
+
+.. image:: _static/5.12.PNG
+图5.12 ControllerManager细节面板
+
+手柄按键的使用需要采用调用接口API的形式，具体API请参照第6章手柄相关接口。
+
+
+**注意**：我们建议您在使用运动控制器手柄时，使射线与运动控制器呈现一定角度，这样能增加用户使用舒适度，而且能避免阻挡超声波模块引起的跟踪误差：
+
+.. image:: _static/5.13.PNG
+图5.13 建议的射线角度
+
+5.3.3	使用6dof手柄的按键、触摸板
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+使用6dof手柄的按键与触摸板，需要在调用接口API，详见6.3小节。这里仅介绍接口API的参数与物理手柄按键的对应关系：
+
+.. image:: _static/5.14.png
+图5.14 6dof手柄相关API按键参数与物理按键的对应关系
+
+此外，触摸板与3dof一致，这里不再赘述。
+
